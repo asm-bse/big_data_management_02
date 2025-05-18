@@ -24,8 +24,8 @@ A sample project demonstrating three data modeling approaches in MongoDB (refere
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/asm-bse/big_data_management_02
+   cd big_data_management_02
    ```
 
 2. **Configure MongoDB URI**
