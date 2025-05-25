@@ -1,89 +1,78 @@
-# Lab2 MongoDB Models
+
+# Lab2 Big Data Management MongoDB Models
 
 **Group Members:** Aleksandr Smolin, Denis Shadrin
 
-A sample project demonstrating three data modeling approaches in MongoDB (referenced, embedding one-to-many, embedding many-to-one) using Python, Faker, and PyMongo. The script supports two modes:
+This project demonstrates three MongoDB data modeling approaches (M1: referenced, M2: embedded company in person, M3: embedded employees in company) using Python, Faker, and PyMongo. The script is optimized for both small and very large datasets (hundreds of thousands to millions of documents) and supports two modes:
 
-* **populate** – generate fake data and populate three models (M1, M2, M3)
-* **queries** – run four example queries/updates (Q1–Q4) on existing data
+* **populate** – generate fake data and populate all three models using memory-efficient batch processing
+* **queries** – run four example queries/updates (Q1–Q4) on existing data with performance measurement
 
 ---
 
-## 🛠️ Prerequisites
+##  Prerequisites
 
 * Python 3.8+
 * MongoDB (local or remote)
-* Dependencies (install via pip):
-
+* Dependencies:
   ```bash
   pip install pymongo faker
   ```
 
-## 🚀 Getting Started
+##  Getting Started
 
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/asm-bse/big_data_management_02
-   cd big_data_management_02
-   ```
-
-2. **Configure MongoDB URI**
-
-   * By default, the script uses `mongodb://localhost:27017`.
-   * To connect to a remote instance or use credentials, set the `MONGODB_URI` environment variable or pass `--uri`.
+1. **Configure MongoDB URI**
+   * Default: `mongodb://localhost:27017`
+   * Custom: Set `MONGODB_URI` environment variable or use `--uri` parameter
 
 3. **Install dependencies**
-
    ```bash
-   pip install -r requirements.txt
+   pip install pymongo faker
    ```
 
-## ⚡ Usage
+##  Usage
 
-### 1. Populate collections
+### 1. Populate collections (auto-optimized for dataset size)
 
-Generate fake data and create three models:
-
+**Small dataset (in-memory, fast):**
 ```bash
-python lab1_mongodb_models.py populate \
-  --uri mongodb://localhost:27017 \
-  --db lab1_db \
-  --n_companies 4999 \
-  --n_persons 50001
+python main.py populate --db lab1_db --n_companies 1000 --n_persons 10000
 ```
 
-* `--db`: database name (default: `lab1_db`)
-* `--n_companies`: number of company documents
-* `--n_persons`: number of person documents
+**Large dataset (streaming batch mode):**
+```bash
+python main.py populate --db lab1_db --n_companies 500000 --n_persons 5000000
+```
+
+* The script automatically switches to optimized batch mode for >10,000 companies or >100,000 persons.
+* You can use `--uri` to specify a remote MongoDB instance.
 
 ### 2. Run queries
 
-Execute Q1–Q4 on existing data:
-
+Run Q1–Q4 on all three models:
 ```bash
-python lab1_mongodb_models.py queries \
-  --uri mongodb://localhost:27017 \
-  --db lab1_db
+python main.py queries --db lab1_db
 ```
+This prints counts, timings, and samples for each query in each model.
 
-This will print counts, timings, and samples for each query in each model.
+### 3. Clean up
 
-## 📂 Clean Up
-
-To drop the database (remove all data):
-
+Drop the database (remove all data):
 ```bash
-python clean_db.py \
-  --uri mongodb://localhost:27017 \
-  --db lab1_db
+python clean_db.py --db lab1_db
 ```
 
-## 🔍 Project Structure
+##  Project Structure
 
 ```
-├── lab1_mongodb_models.py    # Main script (populate & queries)
-├── clean_db.py               # Script to drop a MongoDB database
-├── README.md                 # This readme
-└── requirements.txt          # Python dependencies
+├── main.py              # Main script (populate & queries)
+├── clean_db.py          # Script to drop a MongoDB database
+└── readme.md            
 ```
+
+## Query Types
+
+- **Q1**: Full name concatenation with company names
+- **Q2**: Employee count per company 
+- **Q3**: Age updates for employees born before 1988
+- **Q4**: Append " Company" suffix to company names (if not present)
