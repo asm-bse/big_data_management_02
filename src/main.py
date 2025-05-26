@@ -651,23 +651,21 @@ def run_queries_M2(db: Database) -> None:
 
     # Q2: count of employees per company (including companies with 0 employees)
     start = time.time()
-    comp_coll = db.companies_ref
     q2 = list(
-        comp_coll.aggregate(
+        pers_coll.aggregate(
             [
                 {
-                    "$lookup": {
-                        "from": "persons_emb",
-                        "localField": "_id",
-                        "foreignField": "company._id",
-                        "as": "employees",
+                    "$group": {
+                        "_id": "$company._id",
+                        "name": {"$first": "$company.name"},
+                        "num_employees": {"$sum": 1}
                     }
                 },
                 {
                     "$project": {
                         "_id": 0,
                         "name": 1,
-                        "num_employees": {"$size": "$employees"},
+                        "num_employees": 1,
                     }
                 },
                 {"$sort": {"num_employees": -1}},
