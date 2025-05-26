@@ -30,7 +30,7 @@ This project demonstrates three MongoDB data modeling approaches (M1: referenced
    pip install pymongo faker
    ```
 
-##  Usage
+##  Usage (from src/)
 
 ### 1. Populate collections (auto-optimized for dataset size)
 
