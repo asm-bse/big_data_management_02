@@ -1,2 +1,4 @@
 Faker==30.6.0
 pymongo==4.13.0
+python-dateutil==2.8.2
+typing-extensions==4.13.2
