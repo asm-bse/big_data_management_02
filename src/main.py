@@ -871,7 +871,6 @@ def populate_data(
         populate_M2(db, companies, persons, batch_size_insert)
         populate_M3(db, companies, persons, min(5_000, max(1, len(companies) // 10)))
 
-
 def run_queries(db: Database) -> None:
     """
     Convenience wrapper that runs all three model query suites.
